@@ -11,7 +11,7 @@ public class Barrel extends GameObject {
 	}
 
 	public void moveRight() {
-		x += 2;
+		x += 1*DonkeyKangGameMap.getLevel();
 		if(picture.equals("barrelUpright")){
 			picture = "barrelTilted";
 		}
@@ -44,7 +44,7 @@ public class Barrel extends GameObject {
 	}
 
 	public void moveLeft() {
-		x-=2;
+		x-= 1*DonkeyKangGameMap.getLevel();
 		if(picture.equals("barrelUpright")){
 			picture = "barrelTilted";
 		}

@@ -13,20 +13,20 @@ public class DonkeyKangGameMap extends GameMap {
 	protected List<Latter> latters = new ArrayList<Latter>();
 	protected List<Barrel> barrels = new ArrayList<Barrel>();
 	private JumpMan hero = new JumpMan(300, 750);
-	private DonkeyKang villan = new DonkeyKang(0, 20);
+	private DonkeyKang villan = new DonkeyKang(0, 8);
 	protected boolean isMovingRight = false;
 	protected boolean isMovingLeft = false;
 	protected boolean isClimbingDown = false;
 	protected static boolean isClimbing = false;
 	protected int counter;
 	protected int test = 0;
+	public static int level = 1;
 	public static boolean isMovingUp = false;
 	public DonkeyKangGameMap(){
 		setUpSteps();
 		setUpLatters();
 	}
 	private void setUpLatters() {
-//		barrels.add(new Barrel(30, 70));
 		for(int i =0; i<3; i++){
 			latters.add(new Latter(steps.get(26).getX(), steps.get(10+28*i).getY()));
 			latters.add(new Latter(steps.get(29).getX()+30, steps.get(16+28*i).getY()));
@@ -34,6 +34,9 @@ public class DonkeyKangGameMap extends GameMap {
 		latters.add(new Latter(steps.get(26).getX(), steps.get(26+28*3).getY()-86));
 		latters.add(new Latter(steps.get(29).getX()+30, steps.get(29+28*2).getY()+98));
 		
+	}
+	public static int getLevel(){
+		return level;
 	}
 	@Override
 	public void openBackgroundImage(){
@@ -122,6 +125,15 @@ public class DonkeyKangGameMap extends GameMap {
 		}
 		return false;
 	}
+	private boolean checkJumpManCollisionsWithDonkeyKong(JumpMan hero) {
+		int x = hero.getX();
+		int y = hero.getY();
+		Rectangle testBounds = new Rectangle(x, y, hero.getWidth(), hero.getHeight());
+		if (villan.getBoundingRect().intersects(testBounds)){
+			return true;
+		}
+		return false;
+	}
 	public int checkAllSpecialYValues(JumpMan hero){
 		for(int i=0; i<latters.size(); i++){
 			if(hero.getY()==latters.get(i).getY()){
@@ -146,7 +158,7 @@ public class DonkeyKangGameMap extends GameMap {
 		isMovingLeft = false;
 		
 	}
-	public void tick(Timer t) {
+	public void tick(Timer t, Timer t2) {
 		if(isClimbing && checkJumpManCollisionsWithLatter(hero)){
 			hero.climb();
 		}
@@ -189,8 +201,20 @@ public class DonkeyKangGameMap extends GameMap {
 		for(int i=0; i<barrels.size(); i++){
 			barrelMove(barrels.get(i));
 		}
+		if(checkJumpManCollisionsWithDonkeyKong(hero)){
+			t.stop();
+			t2.stop();
+			JOptionPane.showMessageDialog(null, "Level " + level + " passed.", "Level Passed", JOptionPane.INFORMATION_MESSAGE);
+			hero.setX(300);
+			hero.setY(750);
+			barrels = new ArrayList<Barrel>();
+			level++;
+			t.start();
+			t2.start();
+		}
 		if(checkJumpManCollisionsWithBarrel(hero)){
 			t.stop();
+			t2.stop();
 			//openEndGameImage();
 			JOptionPane.showMessageDialog(null, "You suck at Donkey Kang.", "You lose!", JOptionPane.INFORMATION_MESSAGE, null);
 //			level++;
@@ -217,10 +241,9 @@ public class DonkeyKangGameMap extends GameMap {
 	public void endClimbDown() {
 		isClimbingDown = false;
 	}
-	public void tick2(Timer t) {
+	public void tick2() {
 		barrels.add(new Barrel(70, 60));
 		if(checkJumpManCollisionsWithBarrel(hero)){
-			t.stop();
 		}
 	}
 	private void barrelMove(Barrel b) {

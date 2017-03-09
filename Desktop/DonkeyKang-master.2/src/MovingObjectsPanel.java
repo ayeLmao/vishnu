@@ -31,15 +31,15 @@ public class MovingObjectsPanel extends JPanel {
 		t = new Timer(10, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				gm.tick(t);
+				gm.tick(t, t2);
 				repaint();
 			}
 				
 		});
-		t2 = new Timer(5000, new ActionListener() {
+		t2 = new Timer(5000/DonkeyKangGameMap.getLevel(), new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				gm.tick2(t2);
+				gm.tick2();
 				repaint();
 			}
 				
