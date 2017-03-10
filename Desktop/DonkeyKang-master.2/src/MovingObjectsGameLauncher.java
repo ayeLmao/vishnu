@@ -20,6 +20,7 @@ public class MovingObjectsGameLauncher {
 		gameFrame.pack();
 		gameFrame.setSize(960, 825);
 		mop.setBackground(Color.black);
+		
 		gameFrame.setVisible(true);
 		gameFrame.setDefaultCloseOperation(gameFrame.EXIT_ON_CLOSE);
 	}

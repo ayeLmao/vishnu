@@ -22,6 +22,16 @@ public class DonkeyKangGameMap extends GameMap {
 	protected int test = 0;
 	public static int level = 1;
 	public static boolean isMovingUp = false;
+	public boolean remakeMap;
+	
+	public void setRemake(boolean input){
+		remakeMap = input;
+	}
+	
+	public boolean getRemake(){
+		return remakeMap;
+	}
+	
 	public DonkeyKangGameMap(){
 		setUpSteps();
 		setUpLatters();
@@ -41,6 +51,14 @@ public class DonkeyKangGameMap extends GameMap {
 	@Override
 	public void openBackgroundImage(){
 		
+	}
+	
+	public void setAllEqualToFalse(){
+		isMovingUp =false;
+		isClimbing = false;
+		isClimbingDown = false;
+		isMovingLeft = false;
+		isMovingRight = false;
 	}
 
 	private void setUpSteps() {
@@ -207,7 +225,9 @@ public class DonkeyKangGameMap extends GameMap {
 			JOptionPane.showMessageDialog(null, "Level " + level + " passed.", "Level Passed", JOptionPane.INFORMATION_MESSAGE);
 			hero.setX(300);
 			hero.setY(750);
+			setAllEqualToFalse();
 			barrels = new ArrayList<Barrel>();
+			remakeMap = true;
 			level++;
 			t.start();
 			t2.start();

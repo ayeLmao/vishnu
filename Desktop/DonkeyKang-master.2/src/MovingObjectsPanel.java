@@ -14,10 +14,11 @@ import javax.swing.Timer;
 public class MovingObjectsPanel extends JPanel {
 	
 	final Dimension defaultDim;
-	DonkeyKangGameMap gm;
+	public static DonkeyKangGameMap gm;
 	Timer t;
 	Timer t2;
 	Image image1;
+	
 	
 	public MovingObjectsPanel(Dimension dim) {
 		defaultDim = dim;
@@ -26,17 +27,27 @@ public class MovingObjectsPanel extends JPanel {
 		t.start();
 		t2.start();
 	}
-	private void makeGameMap() {
+	
+	public void makeGameMap() {
+		int c = 5000-500*DonkeyKangGameMap.getLevel();
+		if(c<1000){
+			c = 1000;
+		}
+		System.out.println(c);
 		gm = new DonkeyKangGameMap();
 		t = new Timer(10, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				gm.tick(t, t2);
+				if(gm.getRemake()){
+					makeGameMap();
+				}
+				gm.setRemake(false)
 				repaint();
 			}
 				
 		});
-		t2 = new Timer(5000/DonkeyKangGameMap.getLevel(), new ActionListener() {
+		t2 = new Timer(c, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				gm.tick2();
